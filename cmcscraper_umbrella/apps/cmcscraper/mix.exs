@@ -42,7 +42,9 @@ defmodule Cmcscraper.MixProject do
       {:jason, "~> 1.0"},
       {:httpoison, "~> 1.4"},
       {:floki, "~> 0.20.0"},
-      { :statistics, "~> 0.6.2"}
+      {:statistics, "~> 0.6.2"},
+      {:poison, "~> 3.1"},
+      {:exconstructor, "~> 1.1"}
     ]
   end
 
@@ -54,7 +56,7 @@ defmodule Cmcscraper.MixProject do
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      test: ["ecto.drop --quiet", "ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end
 end

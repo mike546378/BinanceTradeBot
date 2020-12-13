@@ -4,7 +4,8 @@ defmodule Cmcscraper.RepoFunctions.CurrencyRepository do
   alias Cmcscraper.Schemas.Currency
   alias Cmcscraper.Schemas.HistoricPrice
 
-  def insert_currency(name) do
+
+  def insert_currency(name) when is_bitstring(name) do
     case Repo.get_by(Currency, currency_name: name) do
       nil ->
         Currency.changeset(%Currency{})
@@ -13,6 +14,17 @@ defmodule Cmcscraper.RepoFunctions.CurrencyRepository do
     |> Currency.changeset(%{currency_name: name})
     |> Repo.insert_or_update()
   end
+
+  def insert_currency(%Currency{} = currency) do
+    case Repo.get_by(Currency, currency_name: currency.currency_name) do
+      nil ->
+        Currency.changeset(%Currency{})
+      changeset -> changeset
+    end
+    |> Currency.changeset(Map.from_struct(currency))
+    |> Repo.insert_or_update()
+  end
+
 
   def get_all_currencies() do
     from(Currency)

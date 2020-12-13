@@ -21,7 +21,7 @@ defmodule Cmcscraper.RepoFunctions.HistoricPriceRepository do
     |> Repo.all()
   end
 
-  @spec update_todays_price(any, any, any, any, any) :: any
+  @spec update_todays_price(String.t(), number(), number(), number(), number()) :: any
   def update_todays_price(currency_name, price, volume, marketcap, ranking) do
     query = from p in HistoricPrice,
       join: c in Currency, on: c.id == p.currency_id,
@@ -39,28 +39,13 @@ defmodule Cmcscraper.RepoFunctions.HistoricPriceRepository do
     |> Repo.insert_or_update()
   end
 
-  def perform_historic_mapping do
-    query = from p in HistoricPrice,
-      order_by: [desc: p.date, desc: p.marketcap]
-
-    Repo.all(query)
-    |> perform_historic_mapping(1)
-  end
-
-  def perform_historic_mapping([], _) do
-    {:ok}
-  end
-
-  def perform_historic_mapping([%{currency_id: 1}|_tail] = list, ranking) when ranking > 1 do
-    perform_historic_mapping(list, 1)
-  end
-
-  def perform_historic_mapping([changeset|tail], ranking) do
-
-    HistoricPrice.changeset(changeset, %{ranking: ranking})
+  def add_update_historic_price(%HistoricPrice{} = historic_price) do
+    case Repo.one from p in HistoricPrice, where: [currency_id: ^historic_price.currency_id, date: ^historic_price.date], limit: 1 do
+      %HistoricPrice{} = p ->
+        HistoricPrice.changeset(p, Map.from_struct(historic_price))
+      nil ->
+        HistoricPrice.changeset(%HistoricPrice{}, Map.from_struct(historic_price))
+    end
     |> Repo.insert_or_update()
-
-    perform_historic_mapping(tail, ranking+1)
   end
-
 end
