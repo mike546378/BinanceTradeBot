@@ -12,10 +12,13 @@ defmodule Cmcscraper.Application do
       Cmcscraper.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: Cmcscraper.PubSub},
-      # Start the update server
-      Cmcscraper.Genservers.UpdateServerLogic
     ]
 
-    Supervisor.start_link(children, strategy: :one_for_one, name: Cmcscraper.Supervisor)
+    # Start the update server if not in test mode
+    case Application.get_env(:cmcscraper, :env) do
+      :test -> children
+      _ -> children ++ [Cmcscraper.Genservers.UpdateServerLogic]
+    end
+    |> Supervisor.start_link(strategy: :one_for_one, name: Cmcscraper.Supervisor)
   end
 end
