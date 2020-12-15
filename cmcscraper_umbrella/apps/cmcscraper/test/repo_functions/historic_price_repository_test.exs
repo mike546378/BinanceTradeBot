@@ -39,12 +39,12 @@ defmodule Cmcscraper.RepoFunctions.HistoricPriceRepositoryTest do
     end
 
     test "add_update_historic_price/1 creates a new historic_price" do
-      {:ok, %Currency{} = currency} = CurrencyRepository.insert_currency(Currency.from_object(@cmc_coin))
+      {:ok, %Currency{} = currency} = CurrencyRepository.add_update_currency(Currency.from_object(@cmc_coin))
       assert {:ok, %HistoricPrice{}} = add_update_historic_price(%{ HistoricPrice.from_object(@cmc_coin) | currency_id: currency.id })
     end
 
     test "add_update_historic_price/1 updates an existing historic_price" do
-      {:ok, %Currency{} = currency} = CurrencyRepository.insert_currency(Currency.from_object(@cmc_coin))
+      {:ok, %Currency{} = currency} = CurrencyRepository.add_update_currency(Currency.from_object(@cmc_coin))
 
       price = Decimal.from_float(546.3)
       {:ok, %HistoricPrice{price: ^price} = result} = add_update_historic_price(%{ HistoricPrice.from_object(@cmc_coin) | currency_id: currency.id })

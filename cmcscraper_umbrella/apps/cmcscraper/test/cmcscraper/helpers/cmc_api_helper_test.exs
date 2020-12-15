@@ -4,6 +4,10 @@ defmodule Cmcscraper.Helpers.CmcApiHelperTest do
   alias Cmcscraper.Models.CmcApi
 
     test "get_request" do
-      assert %CmcApi.ListingLatest{} = get_request("v1/cryptocurrency/listings/latest", "limit=5")
+      assert %{"data" => _, "status" => _ } = get_request("v1/cryptocurrency/listings/latest", "limit=5")
+    end
+
+    test "get_latest_prices/1" do
+      assert %CmcApi.ListingLatest{} = get_latest_prices(5)
     end
   end

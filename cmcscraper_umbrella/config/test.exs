@@ -25,4 +25,5 @@ config :cmcscraper, Cmcscraper.Repo,
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :cmcscraper,
+  env: :test,
   cmc_api_uri: "https://sandbox-api.coinmarketcap.com/"

@@ -2,8 +2,7 @@ defmodule Cmcscraper.Models.CmcApiTest do
   use ExUnit.Case, async: true
   alias Cmcscraper.Models.CmcApi
 
-  test "exconstructor ListingLatest" do
-    data = %{
+  @data %{
       "data" => [
         %{
           "circulating_supply" => 18_569_206,
@@ -95,7 +94,8 @@ defmodule Cmcscraper.Models.CmcApiTest do
       }
     }
 
-    parsed_data = CmcApi.ListingLatest.from_dto(data)
+  test "ListingLatest.from_dto/1 recursively deserializes dto" do
+    parsed_data = CmcApi.ListingLatest.from_dto(@data)
 
     assert %CmcApi.ListingLatest{} = parsed_data
     assert is_list(parsed_data.data)

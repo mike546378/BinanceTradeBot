@@ -7,7 +7,10 @@ defmodule Cmcscraper.Helpers.CmcApiHelper do
 
     response = HTTPoison.get!(base_url <> endpoint <> "?" <> query, [{"X-CMC_PRO_API_KEY", api_key}])
     Poison.decode!(response.body)
-    |> CmcApi.ListingLatest.from_dto()
   end
 
+  def get_latest_prices(count) do
+    get_request("v1/cryptocurrency/listings/latest", "limit=" <> to_string(count))
+    |> CmcApi.ListingLatest.from_dto()
+  end
 end
