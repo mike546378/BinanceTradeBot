@@ -20,7 +20,7 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Source: https://github.com/phoenixframework/phoenix
 
 ## dev.secret.exs
-
+```
 use Mix.Config
 
 pg_host = "localhost"
@@ -50,3 +50,4 @@ config :cmcscraper_web, CmcscraperWeb.Endpoint,
     transport_options: [socket_opts: [:inet6]]
   ],
   secret_key_base: secret_key_base
+```
