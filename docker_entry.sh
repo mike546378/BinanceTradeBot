@@ -21,11 +21,9 @@ if [ ! -f $webApp/assets/tsconfig.json ]; then
   cp -R $baseDir/../initconfigs/* $webApp/assets/
 fi
 
-if [ $REBUILD ]; then
-  echo "Building dependancies"
-  cd $baseDir && mix deps.get
-  cd $webApp/assets && npm install --save-dev -y && node node_modules/webpack/bin/webpack.js --mode development
-fi
+echo "Building dependancies"
+cd $baseDir && mix deps.get
+cd $webApp/assets && npm install --save-dev -y && node node_modules/webpack/bin/webpack.js --mode development
 
 # Create, migrate, and seed database if it doesn't exist.
 if [[ -z `psql -Atqc "\\list $PGDATABASE"` ]]; then

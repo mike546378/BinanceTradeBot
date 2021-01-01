@@ -3,6 +3,27 @@ version: '3'
 
 # Containers we are going to run
 services:
+  phoenix:
+    build:
+      context: .
+    environment:
+      APPNAME: cmcscraper
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: cmcscraper
+      PGPORT: 5432
+      PGHOST: db
+      REBUILD: null
+      MIGRATE: null
+    stdin_open: true
+    tty: true
+    ports:
+      - "4000:4000"
+      - "4001:4001"
+    depends_on:
+      - db
+    volumes:
+      - .:/app:cached
   db:
     image: postgres:9.6
     environment:
