@@ -54,4 +54,40 @@ defmodule Cmcscraper.RepoFunctions.HistoricPriceRepositoryTest do
       new_historic_price = %{ HistoricPrice.from_object(@cmc_coin) | currency_id: currency.id, price: 54.63 }
       assert {:ok, %HistoricPrice{id: ^price_id, price: ^price}} = add_update_historic_price(new_historic_price)
     end
+
+    test "get_recent_price_data/1" do
+      test_coin = @cmc_coin
+      insert_test_price_data(test_coin, 1)
+      insert_test_price_data(%{ test_coin | slug: "bitcoin" }, 2)
+      insert_test_price_data(%{ test_coin | slug: "ethereum" }, 3)
+
+      assert length(get_recent_price_data(3)) == 9
+      assert length(get_recent_price_data(4)) == 12
+      assert [ %HistoricPrice{} | _ ] = get_recent_price_data(2)
+    end
+
+    test "get_recent_price_data_grouped/1" do
+      test_coin = @cmc_coin
+      insert_test_price_data(test_coin, 1)
+      insert_test_price_data(%{ test_coin | slug: "bitcoin" }, 2)
+      insert_test_price_data(%{ test_coin | slug: "ethereum" }, 3)
+
+      result = get_recent_price_data_grouped(3)
+      assert length(result) == 3
+      [head | _ ] = result
+      assert {_id, [%HistoricPrice{} | _]} = head
+    end
+
+
+    defp insert_test_price_data(cmc_coin, initial_rank) do
+      {:ok, %Currency{} = currency} = CurrencyRepository.add_update_currency(Currency.from_object(cmc_coin))
+      historic_price = %{ HistoricPrice.from_object(cmc_coin) | currency_id: currency.id, price: 54.63, date: DateTime.utc_now |> DateTime.to_naive }
+      add_update_historic_price(%{ historic_price | date: Date.utc_today |> Date.add(-0), ranking: initial_rank })
+      add_update_historic_price(%{ historic_price | date: Date.utc_today |> Date.add(-1), ranking: initial_rank + 1 })
+      add_update_historic_price(%{ historic_price | date: Date.utc_today |> Date.add(-2), ranking: initial_rank + 2 })
+      add_update_historic_price(%{ historic_price | date: Date.utc_today |> Date.add(-3), ranking: initial_rank + 3 })
+      add_update_historic_price(%{ historic_price | date: Date.utc_today |> Date.add(-4), ranking: initial_rank + 4 })
+      add_update_historic_price(%{ historic_price | date: Date.utc_today |> Date.add(-5), ranking: initial_rank + 5 })
+      currency
+    end
   end

@@ -40,5 +40,6 @@ cd $baseDir/apps/$APPNAME
 mix ecto.migrate
 
 cd $baseDir
+mix test
 mix phx.server
 

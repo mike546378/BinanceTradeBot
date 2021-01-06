@@ -3,7 +3,7 @@ defmodule Cmcscraper.RepoFunctions.HistoricPriceRepository do
   alias Cmcscraper.Repo
   alias Cmcscraper.Schemas.HistoricPrice
   alias Cmcscraper.Schemas.Currency
-  alias Cmcscraper.RepoFunctions.CurrencyRepository
+  alias DateTime
 
   def insert_price([date = %Date{}, price, volume, marketcap], currency_id) do
     case Repo.get_by(HistoricPrice, [currency_id: currency_id, date: date]) do
@@ -21,22 +21,25 @@ defmodule Cmcscraper.RepoFunctions.HistoricPriceRepository do
     |> Repo.all()
   end
 
-  @spec update_todays_price(String.t(), number(), number(), number(), number()) :: any
-  def update_todays_price(currency_name, price, volume, marketcap, ranking) do
-    query = from p in HistoricPrice,
-      join: c in Currency, on: c.id == p.currency_id,
-      where: c.currency_name == ^currency_name and p.date == ^Date.utc_today(),
-      order_by: [desc: p.date],
-      limit: 1
+  def get_recent_price_data(days) do
 
-    case Repo.all(query) do
-      [] ->
-        {:ok, %Currency{} = currency} = CurrencyRepository.insert_currency(currency_name)
-        HistoricPrice.changeset(%HistoricPrice{currency_id: currency.id})
-      [changeset] -> changeset
-    end
-    |> HistoricPrice.changeset(%{price: price, volume: volume, marketcap: marketcap, date: Date.utc_today(), ranking: ranking})
-    |> Repo.insert_or_update()
+    date = Date.utc_today
+      |> Date.add(-(days-1))
+
+    price_query =
+      from p in HistoricPrice,
+        join: c in Currency,
+          on: c.id == p.currency_id,
+        where: p.date >= ^date,
+        preload: [currency: c]
+
+    Repo.all(price_query)
+  end
+
+  def get_recent_price_data_grouped(days) do
+    get_recent_price_data(days)
+    |> Enum.group_by(fn p -> p.currency_id end, fn p -> p end)
+    |> Map.to_list
   end
 
   def add_update_historic_price(%HistoricPrice{} = historic_price) do

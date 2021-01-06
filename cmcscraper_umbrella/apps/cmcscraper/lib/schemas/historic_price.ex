@@ -57,4 +57,7 @@ defmodule Cmcscraper.Schemas.HistoricPrice do
     }
   end
 
+  def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.ranking > item2.ranking, do: :gt
+  def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.ranking == item2.ranking, do: :eq
+  def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.ranking < item2.ranking, do: :lt
 end
