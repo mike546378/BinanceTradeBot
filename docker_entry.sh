@@ -23,7 +23,7 @@ fi
 
 echo "Building dependancies"
 cd $baseDir && mix deps.get
-cd $webApp/assets && npm install --save-dev -y && node node_modules/webpack/bin/webpack.js --mode development
+cd $webApp/assets && npm install --save-dev -y
 
 # Create, migrate, and seed database if it doesn't exist.
 if [[ -z `psql -Atqc "\\list $PGDATABASE"` ]]; then
