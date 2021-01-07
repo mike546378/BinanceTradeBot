@@ -37,7 +37,8 @@ defmodule CmcscraperWeb.Api.DataController do
     json(conn, currency)
   end
 
-  def get_analysis(conn, _params) do
+  def get_analysis(conn, params) do
+    params |> IO.inspect()
     data = HistoricPriceRepository.get_recent_price_data_grouped(4)
     currency = Enum.map(data,
     fn record ->
