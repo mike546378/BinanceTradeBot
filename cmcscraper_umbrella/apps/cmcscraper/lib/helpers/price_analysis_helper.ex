@@ -15,13 +15,22 @@ defmodule Cmcscraper.Helpers.PriceAnalysisHelper do
         lower = Enum.map(x, fn xelem ->
           :math.pow(xelem - xmean, 2)
         end)
-
-        %{
-          name: currency_name,
-          slope: Enum.sum(upper)/Enum.sum(lower),
-          start: price_data |> Enum.sort(HistoricPrice) |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).(),
-          end: Enum.sort(price_data, HistoricPrice) |> Enum.reverse |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).()
-        }
+        case Enum.sum(lower) == 0 do
+          true ->
+            %{
+              name: currency_name,
+              slope: -999,
+              start: price_data |> Enum.sort(HistoricPrice) |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).(),
+              end: Enum.sort(price_data, HistoricPrice) |> Enum.reverse |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).()
+            }
+          false ->
+            %{
+              name: currency_name,
+              slope: Enum.sum(upper)/Enum.sum(lower),
+              start: price_data |> Enum.sort(HistoricPrice) |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).(),
+              end: Enum.sort(price_data, HistoricPrice) |> Enum.reverse |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).()
+            }
+        end
     end
   end
 
