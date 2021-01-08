@@ -19,7 +19,7 @@ defmodule Cmcscraper.Genservers.UpdateServerLogic do
   def init(state) do
     Process.register(self(), :update_server)
     send(self(), {:delayed_price_update_loop})
-    send(self(), {:binance_loop})
+    send(self(), {:delayed_binance_loop})
     {:ok, state}
   end
 
