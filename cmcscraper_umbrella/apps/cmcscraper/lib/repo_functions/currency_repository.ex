@@ -35,6 +35,10 @@ defmodule Cmcscraper.RepoFunctions.CurrencyRepository do
     Repo.one from c in Currency, where: [currency_name: ^name], limit: 1, preload: [historic_price: ^price_query]
   end
 
+  def get_currency_by_symbol(symbol) do
+    Repo.one from c in Currency, where: [symbol: ^symbol], limit: 1
+  end
+
   def get_currency_data(limit, offset) when is_number(limit) and is_number(offset) do
 
     order_query =

@@ -5,7 +5,7 @@ defmodule CmcscraperWeb.Api.DataController do
   alias Cmcscraper.RepoFunctions.HistoricPriceRepository
   alias Cmcscraper.Helpers.PriceAnalysisHelper
 
-  def update_latest_prices(conn, _params) do
+  def get_balance_by_symbol(conn, _params) do
       UpdateServer.update_latest_prices()
       json(conn, %{success: true})
   end

@@ -6,6 +6,7 @@ defmodule Cmcscraper.Schemas.Currency do
   schema "currency" do
     field :currency_name, :string
     field :cmc_id, :integer
+    field :symbol, :string
     has_many :historic_price, Cmcscraper.Schemas.HistoricPrice
     timestamps()
   end
@@ -16,7 +17,7 @@ defmodule Cmcscraper.Schemas.Currency do
         ) :: Ecto.Changeset.t()
   def changeset(currency, params \\ %{}) do
     currency
-    |> cast(params, [:currency_name, :cmc_id])
+    |> cast(params, [:currency_name, :cmc_id, :symbol])
     |> unique_constraint(:currency_name)
   end
 
@@ -25,6 +26,7 @@ defmodule Cmcscraper.Schemas.Currency do
     %__MODULE__{
       currency_name: cmc_coin.slug,
       cmc_id: cmc_coin.id,
+      symbol: cmc_coin.symbol
     }
   end
 end

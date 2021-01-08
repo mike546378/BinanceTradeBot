@@ -45,6 +45,13 @@ defmodule CmcscraperWeb.Router do
       get "/data/getcurrencydata", Api.DataController, :get_currency_data
       get "/data/analysis", Api.DataController, :get_analysis
       get "/data/coin/getbyname/:name", Api.DataController, :get_coin_by_name
+
+      get "/portfolio/add", Api.PortfolioController, :add
+      get "/portfolio/remove/:symbol", Api.PortfolioController, :remove
+
+      get "/binance/getbalance/:symbol", Api.BinanceController, :get_balance_by_symbol
+      get "/binance/sell/:symbol", Api.BinanceController, :sell_by_symbol
+
     end
 
     scope "/" do
