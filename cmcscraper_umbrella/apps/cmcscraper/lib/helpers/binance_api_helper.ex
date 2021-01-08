@@ -80,13 +80,16 @@ defmodule Cmcscraper.Helpers.BinanceApiHelper do
 
   def sell_all(symbol) do
     bal = get_account_balance(symbol)
+    |> IO.inspect()
     lot_size = get_lot_step_size(symbol)
+    |> IO.inspect()
     %Decimal{exp: exponent } = Decimal.from_float(lot_size)
 
     e = case exponent > 0 do
           true -> 0
           false -> exponent * -1
         end
+      |> IO.inspect()
 
     query = "symbol=" <> symbol <> "USDT&side=SELL&type=MARKET&quantity=" <> Float.to_string(Float.floor(bal, e)) <> "&"
     resp = post_request_with_signature("v3/order", query)
