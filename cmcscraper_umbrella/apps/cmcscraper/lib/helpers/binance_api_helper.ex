@@ -89,7 +89,7 @@ defmodule Cmcscraper.Helpers.BinanceApiHelper do
         end
 
     query = "symbol=" <> symbol <> "USDT&side=SELL&type=MARKET&quantity=" <> Float.to_string(Float.floor(bal, e)) <> "&"
-    resp = post_request_with_signature("v3/order/test", query)
+    resp = post_request_with_signature("v3/order", query)
     case resp.status_code do
       200 ->
         %{"success" => true}
