@@ -2,6 +2,7 @@ defmodule CmcscraperWeb.Api.PortfolioController do
   use CmcscraperWeb, :controller
   alias Cmcscraper.RepoFunctions.CurrencyRepository
   alias Cmcscraper.Schemas.Currency
+  alias Cmcscraper.Schemas.Portfolio
   alias Cmcscraper.RepoFunctions.PortfolioRepository
 
   def add(conn, %{"symbol" => symbol, "price" => price, "volume" => volume, "percent" => percent}) do
@@ -20,7 +21,7 @@ defmodule CmcscraperWeb.Api.PortfolioController do
     result = PortfolioRepository.get_active_trades()
     |> Enum.map(fn x ->
       selling_price = Decimal.to_float(x.peak_price) - (Decimal.to_float(x.peak_price)/100*Decimal.to_float(x.percentage_change_requirement))
-      %{portfolio: Map.from_struct(x), selling_at: selling_price} end)
+      %{portfolio: Portfolio.to_dto(x), selling_at: selling_price} end)
     json(conn, %{success: true, data: result})
   end
 end
