@@ -39,9 +39,7 @@ defmodule Cmcscraper.Helpers.BinanceApiHelper do
     signature = :crypto.hmac(:sha256, api_secret, body)
       |> Base.encode16()
     body = body <> "&signature=" <> signature
-    |> IO.inspect([{:binaries, :as_strings}])
-    response = HTTPoison.post!(base_url <> endpoint <> "?" <> body, "", [{"X-MBX-APIKEY", api_key}])
-    |> IO.inspect([{:binaries, :as_strings}])
+    HTTPoison.post!(base_url <> endpoint <> "?" <> body, "", [{"X-MBX-APIKEY", api_key}])
   end
 
   def get_average_price(symbol) do

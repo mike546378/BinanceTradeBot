@@ -15,4 +15,10 @@ defmodule CmcscraperWeb.Api.PortfolioController do
     PortfolioRepository.remove_trade(currency.id)
     json(conn, %{success: true})
   end
+
+  def list(conn, _params) do
+    PortfolioRepository.get_active_trades()
+    |> Enum.map(fn x -> %{x | selling_at: x.peak_price - (x.peak_price/100*x.required_percentage)} end)
+    json(conn, %{success: true})
+  end
 end
