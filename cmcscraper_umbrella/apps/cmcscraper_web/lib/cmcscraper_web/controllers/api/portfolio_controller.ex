@@ -17,8 +17,8 @@ defmodule CmcscraperWeb.Api.PortfolioController do
   end
 
   def list(conn, _params) do
-    PortfolioRepository.get_active_trades()
+    result = PortfolioRepository.get_active_trades()
     |> Enum.map(fn x -> %{x | selling_at: x.peak_price - (x.peak_price/100*x.required_percentage)} end)
-    json(conn, %{success: true})
+    json(conn, %{success: true, data: result})
   end
 end
