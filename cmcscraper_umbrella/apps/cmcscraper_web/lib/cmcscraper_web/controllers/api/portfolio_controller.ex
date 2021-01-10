@@ -19,7 +19,7 @@ defmodule CmcscraperWeb.Api.PortfolioController do
   def list(conn, _params) do
     result = PortfolioRepository.get_active_trades()
     |> Enum.map(fn x ->
-      selling_price = Decimal.to_float(x.peak_price) - (Decimal.to_float(x.peak_price)/100*Decimal.to_float(x.required_percentage))
+      selling_price = Decimal.to_float(x.peak_price) - (Decimal.to_float(x.peak_price)/100*Decimal.to_float(x.percentage_change_requirement))
       %{x | selling_at: selling_price} end)
     json(conn, %{success: true, data: result})
   end
