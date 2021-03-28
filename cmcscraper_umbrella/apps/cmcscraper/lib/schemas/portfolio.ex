@@ -38,6 +38,7 @@ defmodule Cmcscraper.Schemas.Portfolio do
       "peakPrice" => map.peak_price,
       "dateCreated" => map.inserted_at,
       "dateUpdated" => map.updated_at,
+      "currency" => Currency.to_dto(map.currency)
     }
   end
 

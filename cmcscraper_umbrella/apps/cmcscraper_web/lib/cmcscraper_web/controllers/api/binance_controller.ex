@@ -7,6 +7,11 @@ defmodule CmcscraperWeb.Api.BinanceController do
       json(conn, resp)
   end
 
+  def get_balance_full(conn, _) do
+    resp = BinanceApiHelper.get_account_balances()
+    json(conn, resp)
+  end
+
   def sell_by_symbol(conn, %{"symbol" => symbol}) do
     resp = BinanceApiHelper.sell_all(symbol)
     json(conn, resp)

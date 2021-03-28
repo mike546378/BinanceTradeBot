@@ -4,6 +4,7 @@ defmodule CmcscraperWeb.Api.DataController do
   alias Cmcscraper.RepoFunctions.CurrencyRepository
   alias Cmcscraper.RepoFunctions.HistoricPriceRepository
   alias Cmcscraper.Helpers.PriceAnalysisHelper
+  alias Cmcscraper.Schemas
 
   def get_balance_by_symbol(conn, _params) do
       UpdateServer.update_latest_prices()
@@ -11,7 +12,7 @@ defmodule CmcscraperWeb.Api.DataController do
   end
 
   def get_coin_by_name(conn, %{"name" => name}) do
-    currency = CurrencyRepository.to_dto(CurrencyRepository.get_currency_by_name(name))
+    currency = Schemas.Currency.to_dto(CurrencyRepository.get_currency_by_name(name))
     json(conn, currency)
   end
 
@@ -20,7 +21,7 @@ defmodule CmcscraperWeb.Api.DataController do
     {offset, _} = Integer.parse(offset)
     {limit, _} = Integer.parse(limit)
 
-    currency = Enum.map(CurrencyRepository.get_currency_data(limit, offset), fn x -> CurrencyRepository.to_dto(x) end)
+    currency = Enum.map(CurrencyRepository.get_currency_data(limit, offset), fn x -> Schemas.Currency.to_dto(x) end)
     json(conn, currency)
   end
 
@@ -33,7 +34,7 @@ defmodule CmcscraperWeb.Api.DataController do
     {offset, _} = Integer.parse(offset)
     {limit, _} = Integer.parse(limit)
 
-    currency = Enum.map(CurrencyRepository.get_currency_data(limit, offset), fn x -> CurrencyRepository.to_dto(x) end)
+    currency = Enum.map(CurrencyRepository.get_currency_data(limit, offset), fn x -> Schemas.Currency.to_dto(x) end)
     json(conn, currency)
   end
 

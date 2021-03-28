@@ -1,5 +1,6 @@
 defmodule Cmcscraper.Schemas.Currency do
   alias Cmcscraper.Models.CmcApi
+  alias Cmcscraper.Schemas
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -7,7 +8,7 @@ defmodule Cmcscraper.Schemas.Currency do
     field :currency_name, :string
     field :cmc_id, :integer
     field :symbol, :string
-    has_many :historic_price, Cmcscraper.Schemas.HistoricPrice
+    has_many :historic_price, Schemas.HistoricPrice
     timestamps()
   end
 
@@ -29,4 +30,25 @@ defmodule Cmcscraper.Schemas.Currency do
       symbol: cmc_coin.symbol
     }
   end
+
+  def to_dto(%__MODULE__{} = currency) do
+    %{
+        "id" => currency.id,
+        "name" => currency.currency_name,
+        "symbol" => currency.symbol,
+        "dateCreated" => currency.inserted_at,
+        "dateUpdated" => currency.updated_at,
+        "priceData" => map_price_data(currency.historic_price)
+    }
+  end
+
+  def to_dto(nil) do
+    nil
+  end
+
+  defp map_price_data(price_data) when is_list(price_data) do
+    Enum.map(price_data, fn x -> Schemas.HistoricPrice.to_dto(x) end)
+  end
+
+  defp map_price_data(_), do: nil
 end

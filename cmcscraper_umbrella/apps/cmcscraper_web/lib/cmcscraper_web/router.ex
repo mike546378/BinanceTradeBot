@@ -49,8 +49,11 @@ defmodule CmcscraperWeb.Router do
       get "/portfolio/add", Api.PortfolioController, :add
       get "/portfolio/remove/:symbol", Api.PortfolioController, :remove
       get "/portfolio/get", Api.PortfolioController, :list
+      get "/portfolio/sync", Api.PortfolioController, :sync
+      get "/portfolio/updatepercentage/:portfolio_id/:percentage", Api.PortfolioController, :sync
 
       get "/binance/getbalance/:symbol", Api.BinanceController, :get_balance_by_symbol
+      get "/binance/getbalances", Api.BinanceController, :get_balance_full
       get "/binance/sell/:symbol", Api.BinanceController, :sell_by_symbol
 
     end

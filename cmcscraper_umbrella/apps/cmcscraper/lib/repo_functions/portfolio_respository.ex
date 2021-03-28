@@ -4,7 +4,7 @@ defmodule Cmcscraper.RepoFunctions.PortfolioRepository do
   alias Cmcscraper.Schemas.Portfolio
   alias Cmcscraper.Schemas.Currency
 
-  def insert_trade(currency_id, volume, purchase_price), do: insert_trade(currency_id, volume, purchase_price, 10)
+  def insert_trade(currency_id, volume, purchase_price), do: insert_trade(currency_id, volume, purchase_price, 99)
   def insert_trade(currency_id, volume, purchase_price, percentage) do
     Portfolio.changeset(%Portfolio{}, %{currency_id: currency_id, volume: volume, purchase_price: purchase_price, peak_price: purchase_price, purchase_date: DateTime.utc_now(), percentage_change_requirement: percentage})
     |> Repo.insert()

@@ -53,18 +53,4 @@ defmodule Cmcscraper.RepoFunctions.CurrencyRepository do
 
     Repo.all(from c in Currency, limit: ^limit, offset: ^offset, order_by: c.id, preload: [historic_price: ^price_query])
   end
-
-  def to_dto(%Currency{} = currency) do
-    %{
-        "id" => currency.id,
-        "name" => currency.currency_name,
-        "dateCreated" => currency.inserted_at,
-        "dateUpdated" => currency.updated_at,
-        "priceData" => Enum.map(currency.historic_price, fn x -> HistoricPrice.to_dto(x) end)
-    }
-  end
-
-  def to_dto(nil) do
-    nil
-  end
 end
