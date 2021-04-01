@@ -1,23 +1,24 @@
 import { PromiseState } from "src/model/Enums";
-import { ICoin, RequestState } from "src/model/Models";
+import { RequestState } from "src/model/Models";
 
+export interface IGetAnalysisResponse {
+    success: boolean;
+    data: any[];
+}
 
-export const fetchHistoricDataDefaultState: RequestState<IFetchHistoricDataResponse> = {
+export const getAnalysisDefaultState: RequestState<IGetAnalysisResponse> = {
     loadingError: undefined,
     loadingState: PromiseState.Default,
     payload: undefined,
 };
 
-export interface IFetchHistoricDataResponse {
-    coins: ICoin[];
-}
-
-export const fetchHistoricData = async (): Promise<RequestState<IFetchHistoricDataResponse>> => {
+export const getAnalysis = async (): Promise<RequestState<IGetAnalysisResponse>> => {
     try {
-        const response = await fetch("/api/v1/historic_price", { method: "GET" });
+        const response = await fetch("/api/v1/data/analysis", { method: "GET" });
         const data = await response.json();
 
         if (response.ok) {
+            console.log(data);
             return {
                 loadingError: undefined,
                 loadingState: PromiseState.Resolved,

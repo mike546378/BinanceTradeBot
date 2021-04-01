@@ -42,7 +42,7 @@ defmodule Cmcscraper.Schemas.Currency do
     }
   end
 
-  def to_dto(nil) do
+  def to_dto(_) do
     nil
   end
 

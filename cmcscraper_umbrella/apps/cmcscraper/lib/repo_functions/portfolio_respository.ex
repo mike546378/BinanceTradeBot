@@ -3,6 +3,7 @@ defmodule Cmcscraper.RepoFunctions.PortfolioRepository do
   alias Cmcscraper.Repo
   alias Cmcscraper.Schemas.Portfolio
   alias Cmcscraper.Schemas.Currency
+  alias Cmcscraper.Schemas.HistoricPrice
 
   def insert_trade(currency_id, volume, purchase_price), do: insert_trade(currency_id, volume, purchase_price, 99)
   def insert_trade(currency_id, volume, purchase_price, percentage) do
@@ -13,6 +14,17 @@ defmodule Cmcscraper.RepoFunctions.PortfolioRepository do
   def remove_trade(currency_id) do
     q = from p in Portfolio, where: [currency_id: ^currency_id]
     Repo.delete_all(q)
+  end
+
+  def get_by_id(id) when is_integer(id) do
+    (
+      from p in Portfolio,
+      join: c in Currency,
+        on: c.id == p.currency_id,
+      where: p.id == ^id,
+      preload: [currency: c]
+    )
+    |> Repo.one()
   end
 
   def add_update_portfolio(%Portfolio{} = portfolio) when is_nil(portfolio.id) do
@@ -53,12 +65,19 @@ defmodule Cmcscraper.RepoFunctions.PortfolioRepository do
   end
 
   def get_active_trades() do
+    date = Date.utc_today
+      |> Date.add(-3)
+
+    currency_query =
+      from c in Currency,
+        left_join: p in HistoricPrice,
+          on: c.id == p.currency_id,
+        where: p.date >= ^date,
+        preload: [historic_price: p]
+
       (
         from p in Portfolio,
-        join: c in Currency,
-          on: c.id == p.currency_id,
-        where: is_nil(p.sell_date),
-        preload: [currency: c]
+        preload: [currency: ^currency_query]
       )
       |> Repo.all()
   end

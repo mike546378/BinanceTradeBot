@@ -73,9 +73,37 @@ export interface ICoin {
 }
 
 export interface IPriceData {
-    date: Date;
+    date: string;
     ranking: number;
     price: number;
     volume: number;
     marketcap: number;
+}
+
+export interface ICurrency {
+    id: number;
+    name: string;
+    symbol: string;
+    dateCreated: string;
+    dateUpdated: string;
+    priceData: IPriceData[];
+}
+
+export interface IPortfolio {
+    id: number;
+    purchaseDate: string;
+    purchasePrice: number;
+    percentageChangeRequirement: number;
+    volume: number;
+    sellPrice: number;
+    sellDate: string;
+    profit: number;
+    peakPrice: number;
+    sellingAt: number;
+    currency: ICurrency;
+}
+
+export interface IPortfolioSync extends IPortfolio {
+    error: string;
+    slug: string;
 }

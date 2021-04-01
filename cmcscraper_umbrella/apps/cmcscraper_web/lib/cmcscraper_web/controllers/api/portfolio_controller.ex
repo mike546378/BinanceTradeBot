@@ -22,7 +22,8 @@ defmodule CmcscraperWeb.Api.PortfolioController do
     result = PortfolioRepository.get_active_trades()
     |> Enum.map(fn x ->
       selling_price = Decimal.to_float(x.peak_price) - (Decimal.to_float(x.peak_price)/100*Decimal.to_float(x.percentage_change_requirement))
-      %{portfolio: Portfolio.to_dto(x), selling_at: selling_price} end)
+      Portfolio.to_dto(x)
+      |> Map.put(:sellingAt, selling_price) end)
     json(conn, %{success: true, data: result})
   end
 
@@ -56,6 +57,17 @@ defmodule CmcscraperWeb.Api.PortfolioController do
           end
       end
     end)
+    |> Enum.filter(fn x -> x != nil end)
+    |> IO.inspect()
     json(conn, %{success: true, data: balances})
+  end
+
+  def updatepercentage(conn, %{"portfolio_id" => p_portfolio_id, "percentage" => p_percentage}) do
+    {portfolio_id, _} = Integer.parse(p_portfolio_id)
+    {percentage, _} = Integer.parse(p_percentage)
+
+    %Portfolio{} = portfolio = PortfolioRepository.get_by_id(portfolio_id)
+    PortfolioRepository.add_update_portfolio(%Portfolio{portfolio | percentage_change_requirement: percentage })
+    json(conn, %{success: true, data: Portfolio.to_dto(portfolio)})
   end
 end
