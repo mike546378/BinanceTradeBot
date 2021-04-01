@@ -50,7 +50,7 @@ const MainTableRow: React.FC<IPortfolio> = (props) => {
         <tr>
             <td>{props.currency?.name}</td>
             <td>${(holding).toFixed(2)} </td>
-            <td>${(props.sellingAt * props.volume).toFixed(2)}</td>
+            <td>${(sellingAt).toFixed(2)}</td>
             <td>
                 <NumericInput
                     allowNumericCharactersOnly={true}
