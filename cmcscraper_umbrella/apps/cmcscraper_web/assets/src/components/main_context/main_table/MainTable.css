@@ -19,6 +19,6 @@ td.update-column {
     display: flex;
 }
 
-td.update-column a {
-    margin-left: 1rem;
+td.update-column div {
+    margin-right: 1rem;
 }
