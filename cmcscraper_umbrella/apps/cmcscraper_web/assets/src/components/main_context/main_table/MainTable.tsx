@@ -21,7 +21,6 @@ export const MainTable: React.FC<MainTableProps> = (props) => {
                     <th>Peak-Price</th>
                     <th>Min-Price</th>
                     <th>Sell Percentage</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -56,7 +55,7 @@ const MainTableRow: React.FC<IPortfolio> = (props) => {
             <td>${(sellingAt * props.volume).toFixed(2)}</td>
             <td>${peakPrice} </td>
             <td>${sellingAt.toFixed(8)} </td>
-            <td>
+            <td className={"update-column"}>
                 <NumericInput
                     allowNumericCharactersOnly={true}
                     min={0}
@@ -64,8 +63,6 @@ const MainTableRow: React.FC<IPortfolio> = (props) => {
                     value={sellPercentage}
                     leftIcon={"percentage"}
                     onValueChange={(e) => setSellPercentage(e)} />
-            </td>
-            <td>
                 <AnchorButton type={"button"} intent={"none"} onClick={updateHandler}>Update</AnchorButton>
             </td>
         </tr>

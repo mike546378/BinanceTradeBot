@@ -14,3 +14,11 @@ button.bp3-button.bp3-fill.bp3-large {
 .menu-button-wrapper {
     margin-bottom: 2rem;
 }
+
+td.update-column {
+    display: flex;
+}
+
+td.update-column a {
+    margin-left: 1rem;
+}
