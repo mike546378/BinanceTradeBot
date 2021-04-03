@@ -5,6 +5,7 @@ defmodule CmcscraperWeb.Api.PortfolioController do
   alias Cmcscraper.Schemas.Portfolio
   alias Cmcscraper.RepoFunctions.PortfolioRepository
   alias Cmcscraper.Helpers.BinanceApiHelper
+  alias Cmcscraper.Helpers.PortfolioHelper
 
   def add(conn, %{"symbol" => symbol, "price" => price, "volume" => volume, "percent" => percent}) do
     %Currency{} = currency = CurrencyRepository.get_currency_by_symbol(symbol)
@@ -32,30 +33,13 @@ defmodule CmcscraperWeb.Api.PortfolioController do
     ticker_prices = BinanceApiHelper.get_ticker_prices()
     balances = BinanceApiHelper.get_account_balances()
     |> Enum.map(fn x ->
-      %{"asset" => slug, "free" => balance} = x
-      case Enum.find(portfolio, fn y -> y.currency.symbol == slug end) do
-        nil ->
-          if String.to_float(balance) > 0 do
-            case CurrencyRepository.get_currency_by_symbol(slug) do
-              nil -> %{error: :currency_slug_not_found, slug: slug}
-              %Currency{} = currency ->
-                case Enum.find(ticker_prices, fn x -> x["symbol"] == slug <> "USDT" end) do
-                  nil -> %{error: :trade_pair_not_found, slug: slug}
-                  ticker_data ->
-                    current_price = String.to_float(ticker_data["price"])
-                    IO.inspect(balance)
-                    {:ok, resp} = PortfolioRepository.insert_trade(currency.id, balance, current_price)
-                    Portfolio.to_dto(resp)
-                end
-              _ -> {:error, slug}
-            end
-          end
-        %Portfolio{} = pfolio ->
-          if pfolio.volume != balance do
-            {:ok, resp}  = PortfolioRepository.add_update_portfolio(%Portfolio{pfolio | volume: balance})
-            Portfolio.to_dto(resp)
-          end
-      end
+      %{"asset" => slug, "free" => strBalance} = x
+      balance = String.to_float(strBalance)
+      ticker_data =  Enum.find(ticker_prices, fn x -> x["symbol"] == slug <> "USDT" end)
+      portfolio_record = Enum.find(portfolio, fn y -> y.currency.symbol == slug end)
+      currency = CurrencyRepository.get_currency_by_symbol(slug)
+
+      PortfolioHelper.sync_binance(slug, balance, ticker_data, portfolio_record, currency)
     end)
     |> Enum.filter(fn x -> x != nil end)
     |> IO.inspect()

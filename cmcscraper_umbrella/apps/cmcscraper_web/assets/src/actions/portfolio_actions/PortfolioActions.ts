@@ -56,7 +56,7 @@ export const updatePercentage = async (portfolioId: number, percentage: number):
         const response = await fetch("/api/v1/portfolio/updatepercentage/"+portfolioId+"/"+percentage, { method: "GET" });
         const data = await response.json();
         if (response.ok) {
-            Toaster.create({ position: Position.BOTTOM_RIGHT }).show({
+            Toaster.create({ position: Position.TOP_RIGHT }).show({
                 intent: Intent.SUCCESS,
                 message: "Portfolio updated",
                 timeout: 15000,
@@ -68,7 +68,7 @@ export const updatePercentage = async (portfolioId: number, percentage: number):
             };
         }
 
-        Toaster.create({ position: Position.BOTTOM_RIGHT }).show({
+        Toaster.create({ position: Position.TOP_RIGHT }).show({
             intent: Intent.WARNING,
             message: "Failed to save portfolio",
             timeout: 15000,
@@ -79,7 +79,7 @@ export const updatePercentage = async (portfolioId: number, percentage: number):
             payload: undefined,
         };
     } catch (error) {
-        Toaster.create({ position: Position.BOTTOM_RIGHT }).show({
+        Toaster.create({ position: Position.TOP_RIGHT }).show({
             intent: Intent.DANGER,
             message: "Unexpected error occurred ",
             timeout: 15000,
@@ -108,14 +108,13 @@ export const syncBinancePortfolio = async (): Promise<RequestState<ISyncBinanceR
         const response = await fetch("/api/v1/portfolio/sync", { method: "GET" });
         const data: ISyncBinanceResponse = await response.json();
         if (response.ok) {
-            console.log(data);
-            Toaster.create({ position: Position.BOTTOM_RIGHT }).show({
+            Toaster.create({ position: Position.TOP_RIGHT }).show({
                 intent: Intent.SUCCESS,
                 message: "Portfolio updated",
                 timeout: 15000,
             });
             data.data.filter(x => x.error && x.error !== "").forEach(x => {
-                Toaster.create({ position: Position.BOTTOM_RIGHT }).show({
+                Toaster.create({ position: Position.TOP_RIGHT }).show({
                     intent: Intent.WARNING,
                     message: x.error + "  |  " + x.slug,
                     timeout: 10*60*1000,
@@ -128,7 +127,7 @@ export const syncBinancePortfolio = async (): Promise<RequestState<ISyncBinanceR
             };
         }
 
-        Toaster.create({ position: Position.BOTTOM_RIGHT }).show({
+        Toaster.create({ position: Position.TOP_RIGHT }).show({
             intent: Intent.WARNING,
             message: "Failed to save portfolio",
             timeout: 15000,
@@ -139,7 +138,7 @@ export const syncBinancePortfolio = async (): Promise<RequestState<ISyncBinanceR
             payload: undefined,
         };
     } catch (error) {
-        Toaster.create({ position: Position.BOTTOM_RIGHT }).show({
+        Toaster.create({ position: Position.TOP_RIGHT }).show({
             intent: Intent.DANGER,
             message: "Unexpected error occurred ",
             timeout: 15000,

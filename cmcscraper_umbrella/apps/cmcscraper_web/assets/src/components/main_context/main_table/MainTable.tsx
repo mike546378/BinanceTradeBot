@@ -17,6 +17,8 @@ export const MainTable: React.FC<MainTableProps> = (props) => {
                 <tr>
                     <th>Coin</th>
                     <th>Holding</th>
+                    <th>Min-Holdings</th>
+                    <th>Peak-Price</th>
                     <th>Min-Price</th>
                     <th>Sell Percentage</th>
                     <th></th>
@@ -36,10 +38,11 @@ export const MainTable: React.FC<MainTableProps> = (props) => {
 const MainTableRow: React.FC<IPortfolio> = (props) => {
 
     const holding = (props.currency.priceData[0]?.price * props.volume);
+    const peakPrice = props.peakPrice;
     const [sellPercentage, setSellPercentage] = useState(props.percentageChangeRequirement);
     const [sellingAt, setSellingAt] = useState(0);
     useEffect(() => {
-        setSellingAt(holding - holding / 100 * sellPercentage);
+        setSellingAt(peakPrice - peakPrice / 100 * sellPercentage);
     }, [sellPercentage]);
 
     const updateHandler = () => {
@@ -50,7 +53,9 @@ const MainTableRow: React.FC<IPortfolio> = (props) => {
         <tr>
             <td>{props.currency?.name}</td>
             <td>${(holding).toFixed(2)} </td>
-            <td>${(sellingAt).toFixed(2)}</td>
+            <td>${(sellingAt * props.volume).toFixed(2)}</td>
+            <td>${peakPrice} </td>
+            <td>${sellingAt.toFixed(8)} </td>
             <td>
                 <NumericInput
                     allowNumericCharactersOnly={true}

@@ -27,6 +27,13 @@ defmodule Cmcscraper.RepoFunctions.PortfolioRepository do
     |> Repo.one()
   end
 
+  def delete_portfolio(id) when is_integer(id) do
+    (
+      from p in Portfolio, where: p.id == ^id
+    )
+    |> Repo.delete_all()
+  end
+
   def add_update_portfolio(%Portfolio{} = portfolio) when is_nil(portfolio.id) do
     Portfolio.changeset(%Portfolio{}, Map.from_struct(portfolio))
     |> Repo.insert_or_update()
@@ -77,7 +84,8 @@ defmodule Cmcscraper.RepoFunctions.PortfolioRepository do
 
       (
         from p in Portfolio,
-        preload: [currency: ^currency_query]
+        preload: [currency: ^currency_query],
+        where: is_nil(p.sell_date)
       )
       |> Repo.all()
   end
