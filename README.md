@@ -47,7 +47,7 @@ config :cmcscraper, Cmcscraper.Repo,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
 config :cmcscraper,
-  cmc_api_key: System.get_env("CMC_API_KEY") || "88753ba0-ad51-47c4-8f4e-bdcc3b6e88bb",
+  cmc_api_key: System.get_env("CMC_API_KEY") || "INSERT_CMC_API_KEY_HERE",
   binance_api_key: System.get_env("BINANCE_API_KEY") || "INSERT_BINANCE_API_KEY_HERE",
   binance_api_secret: System.get_env("BINANCE_API_SECRET") || "INSERT_BINANCE_API_SECRET_HERE"
 
