@@ -19,16 +19,16 @@ defmodule Cmcscraper.Helpers.PriceAnalysisHelper do
           true ->
             %{
               name: currency_name,
-              slope: -999,
-              start: price_data |> Enum.sort(HistoricPrice) |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).(),
-              end: Enum.sort(price_data, HistoricPrice) |> Enum.reverse |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).()
+              slope: 999,
+              start: Enum.sort(price_data, HistoricPrice) |> Enum.reverse |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).(),
+              end: price_data |> Enum.sort(HistoricPrice) |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).()
             }
           false ->
             %{
               name: currency_name,
               slope: Enum.sum(upper)/Enum.sum(lower),
-              start: price_data |> Enum.sort(HistoricPrice) |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).(),
-              end: Enum.sort(price_data, HistoricPrice) |> Enum.reverse |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).()
+              start: Enum.sort(price_data, HistoricPrice) |> Enum.reverse |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).(),
+              end: price_data |> Enum.sort(HistoricPrice) |> Enum.at(0, %HistoricPrice{ranking: 999}) |> (&(&1.ranking)).()
             }
         end
     end

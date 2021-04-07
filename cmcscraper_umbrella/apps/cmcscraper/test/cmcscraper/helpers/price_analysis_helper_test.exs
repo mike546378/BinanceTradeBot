@@ -61,7 +61,7 @@ defmodule Cmcscraper.Helpers.PriceAnalysisHelperTest do
    ]
 
   test "rank_slope_analysis/1" do
-    assert %{end: 20, name: "ethereum", slope: -1.5, start: 17} = rank_slope_analysis(@price_data)
+    assert %{end: 17, name: "ethereum", slope: -1.5, start: 20} = rank_slope_analysis(@price_data)
   end
 
 end

@@ -4,12 +4,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { connectToSocket, disconnectFromSocket, sessionConnectionDefaultState, socketCallbacks } from "src/actions/socket_actions/SocketActions";
 import { PromiseState } from "src/model/Enums";
 import { ISessionState, RequestState } from "src/model/Models";
+import { MainTableContainer } from "../main_table/MainTableContainer";
 
 import { handleMessage } from "src/actions/socket_actions/MessageHandler";
 import { ErrorLoader, SpinningLoader } from "src/components/general_purpose/page_loaders/PageLoaders";
 
 import "./base.css";
-import { MenuButtonContainer } from "../update_button_container/MenuButtonContainer";
 
 
 
@@ -18,7 +18,7 @@ export const AppBase: React.FC = () => {
     const [sessionConnectionState, setSessionConnectionState] = useState(defaultSessionState);
     const sessionRef = useRef<RequestState<ISessionState>>();
     sessionRef.current = sessionConnectionState;
-    
+
     useEffect(() => {
         if (sessionConnectionState.payload.socket) { sessionConnectionState.payload.socket.socket.disconnect(); }
         setSessionConnectionState({ ...defaultSessionState, loadingState: PromiseState.Pending });
@@ -28,7 +28,7 @@ export const AppBase: React.FC = () => {
                 ...socketCallbacks,
                 onMessage: (e, p, r) => { return handleMessage({ event: e, payload: p, sessionState: sessionRef.current, setSessionState: setSessionConnectionState }); },
                 onError: () => { console.log("Error"); },
-               // onJoin: (e) => { console.log(e); setSessionConnectionState(connectionState(sessionConnectionState.payload, e));}
+                // onJoin: (e) => { console.log(e); setSessionConnectionState(connectionState(sessionConnectionState.payload, e));}
             })
             .then((result: RequestState<ISessionState>) => {
                 setSessionConnectionState(result);
@@ -59,7 +59,7 @@ export const AppBase: React.FC = () => {
     if (sessionConnectionState.loadingState === PromiseState.Pending || sessionConnectionState.loadingState === PromiseState.Default) return <SpinningLoader><h1>{loadingMessage}</h1></SpinningLoader>;
     if (sessionConnectionState.loadingState === PromiseState.Rejected) return <ErrorLoader message={sessionConnectionState.loadingError.message ? sessionConnectionState.loadingError.message : "An error occurred, please try again"} />;
     //return (<></>);
-    return (<MenuButtonContainer {...sessionConnectionState.payload} />);
+    return (<MainTableContainer {...sessionConnectionState.payload} />);
 };
 
 export default AppBase;

@@ -18,7 +18,8 @@ defmodule Cmcscraper.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.4"},
-      {:floki, "~> 0.20.0"}
+      {:floki, "~> 0.20.0"},
+      {:decimal, "~> 2.0"}
     ]
   end
 end

@@ -76,6 +76,7 @@ config :phoenix, :plug_init_mode, :runtime
 config :phoenix, :stacktrace_depth, 20
 
 config :cmcscraper,
-  cmc_api_uri: System.get_env("CMC_API_URI") || "https://pro-api.coinmarketcap.com/"
+  cmc_api_uri: System.get_env("CMC_API_URI") || "https://pro-api.coinmarketcap.com/",
+  binance_api_uri: System.get_env("BINANCE_API_URI") || "https://api1.binance.com/api/"
 
 import_config "dev.secret.exs"

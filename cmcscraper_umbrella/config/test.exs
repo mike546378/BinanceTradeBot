@@ -26,4 +26,5 @@ config :cmcscraper, Cmcscraper.Repo,
 
 config :cmcscraper,
   env: :test,
-  cmc_api_uri: "https://sandbox-api.coinmarketcap.com/"
+  cmc_api_uri: "https://sandbox-api.coinmarketcap.com/",
+  binance_api_uri: System.get_env("BINANCE_API_URI") || "https://api.binance.com/api/"
