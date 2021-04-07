@@ -1,4 +1,13 @@
-# Jormungandr
+# BinanceTradeBot
+
+Trailing stop-loss bot for binance trading & Coinmarketcap rank analysis
+
+Note: This is currently in development, I can not recommend investing based on what this program says and accept no responsibility for any losses 
+
+Running with docker: 
+  * Create dev.secret.exs file in cmcscraper_umnbrella/config folder, populating with config entry below (inserting API keys/secrets where required)
+  * install docker-compose 
+  * run `docker-compose up` from root
 
 To start your Phoenix server:
 
@@ -28,8 +37,6 @@ pg_port = "5432"
 pg_user = "postgres"
 pg_password = "postgres"
 pg_database = "cmcscraper"
-cmc_api_key =
-secret_key_base =
 
 config :cmcscraper, Cmcscraper.Repo,
   username: System.get_env("PGUSER") || pg_user,
@@ -40,9 +47,11 @@ config :cmcscraper, Cmcscraper.Repo,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
 config :cmcscraper,
-  cmc_api_key: System.get_env("CMC_API_KEY") || cmc_api_key
+  cmc_api_key: System.get_env("CMC_API_KEY") || "88753ba0-ad51-47c4-8f4e-bdcc3b6e88bb",
+  binance_api_key: System.get_env("BINANCE_API_KEY") || "INSERT_BINANCE_API_KEY_HERE",
+  binance_api_secret: System.get_env("BINANCE_API_SECRET") || "INSERT_BINANCE_API_SECRET_HERE"
 
-secret_key_base = System.get_env("SECRET_KEY_BASE") || secret_key_base
+secret_key_base = System.get_env("SECRET_KEY_BASE") || "INSERT_SECRET_KEY_HERE"
 
 config :cmcscraper_web, CmcscraperWeb.Endpoint,
   http: [
