@@ -23,7 +23,7 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/app:cached
+      - ./src:/app:cached
   db:
     image: postgres:9.6
     environment:

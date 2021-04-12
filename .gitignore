@@ -37,3 +37,4 @@ pgdata/
 cmcscraper_umbrella/erlang_solutions*
 cmcscraper_umbrella/erlang-solutions*
 .vscode/
+*.secret.exs
