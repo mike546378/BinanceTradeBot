@@ -5,7 +5,7 @@ Trailing stop-loss bot for binance trading & Coinmarketcap rank analysis
 Note: This is currently in development, I can not recommend investing based on what this program says and accept no responsibility for any losses 
 
 Running with docker: 
-  * Create dev.secret.exs file in cmcscraper_umnbrella/config folder, populating with config entry below (inserting API keys/secrets where required)
+  * Create dev.secret.exs file in src/cmcscraper_umnbrella/config folder, populating with config entry below (inserting API keys/secrets where required)
   * install docker-compose 
   * run `docker-compose up` from root
 
