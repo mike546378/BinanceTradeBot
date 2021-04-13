@@ -75,12 +75,13 @@ defmodule Cmcscraper.RepoFunctions.PortfolioRepository do
     date = Date.utc_today
       |> Date.add(-3)
 
+    price_query =
+      from p in HistoricPrice,
+        where: p.date >= ^date
+
     currency_query =
       from c in Currency,
-        left_join: p in HistoricPrice,
-          on: c.id == p.currency_id,
-        where: p.date >= ^date,
-        preload: [historic_price: p]
+        preload: [historic_price: ^price_query]
 
       (
         from p in Portfolio,

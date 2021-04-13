@@ -2,7 +2,7 @@ import { AnchorButton, HTMLTable, NumericInput } from "@blueprintjs/core";
 import React, { useEffect, useState } from "react";
 import { updatePercentage } from "src/actions/portfolio_actions/PortfolioActions";
 
-import { IPortfolio } from "src/model/Models";
+import { IPortfolio, IPriceData } from "src/model/Models";
 
 import "./MainTable.css";
 
@@ -11,6 +11,7 @@ export interface MainTableProps {
 }
 
 export const MainTable: React.FC<MainTableProps> = (props) => {
+    const dummyObj: IPriceData = { date: null, ranking: 9999, price: 999999, volume: 9999, marketcap: 9999 }
     return (
         <HTMLTable striped={true} >
             <thead>
@@ -25,7 +26,11 @@ export const MainTable: React.FC<MainTableProps> = (props) => {
             </thead>
             <tbody>
                 {props.portfolio
-                    .map(x => {x.currency.priceData = x.currency.priceData.sort((b,a) => Date.parse(a.date) - Date.parse(b.date)); return x;})
+                    .map(x => {
+                        x.currency.priceData = x.currency.priceData.sort((b,a) => Date.parse(a.date) - Date.parse(b.date));
+                        if (x.currency.priceData[0] == null) x.currency.priceData.push(dummyObj);
+                        return x;
+                    })
                     .filter((x) => (x.volume * x.currency.priceData[0]?.price) > 5)
                     .sort((a,b) => (b.currency.priceData[0].price * b.volume) - (a.currency.priceData[0].price * a.volume))
                     .map((e) => <MainTableRow key={e.id} {...e} />)}
