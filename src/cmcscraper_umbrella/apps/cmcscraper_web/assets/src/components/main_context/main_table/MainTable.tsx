@@ -91,8 +91,8 @@ const TotalsTableRow: React.FC<MainTableProps> = (props) => {
         <tr>
         <td>Totals</td>
         <td>${(holding).toFixed(2)} </td>
-        <td>${(minHolding).toFixed(2)} </td>
         <td>${(peakHolding).toFixed(2)}</td>
+        <td>${(minHolding).toFixed(2)} </td>
         <td />
         <td />
     </tr>
