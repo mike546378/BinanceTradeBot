@@ -35,3 +35,4 @@ cmcscraper_umbrella/erlang_solutions*
 cmcscraper_umbrella/erlang-solutions*
 .vscode/
 *.secret.exs
+src/cmcscraper_umbrella/node_modules/*
