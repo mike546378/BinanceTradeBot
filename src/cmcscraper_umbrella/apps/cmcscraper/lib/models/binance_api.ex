@@ -30,3 +30,20 @@ defmodule Cmcscraper.Models.BinanceApi.SomeModel do
     }
   end
 end
+
+defmodule Cmcscraper.Models.BinanceApi.Ticker do
+  defstruct price: 0.0,
+            symbol: ""
+
+  @type t :: %__MODULE__{
+          price: String.t(),
+          symbol: String.t()
+        }
+
+  def from_dto(map) when is_map(map) do
+    %__MODULE__{
+      price: map["price"],
+      symbol: map["symbol"]
+    }
+  end
+end
