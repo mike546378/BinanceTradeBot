@@ -25,6 +25,8 @@ defmodule Cmcscraper.Models.AlgoTrading.Epoch do
             sell_high_ticks: 0,
             sell_low_ticks: 0,
             profit_per_trade: 0,
+            trades_per_tick: 0,
+            risk: 0,
             strategy: %AlgoTrading.Strategy{}
 
   @type t :: %__MODULE__{
@@ -36,13 +38,28 @@ defmodule Cmcscraper.Models.AlgoTrading.Epoch do
           total_loss: non_neg_integer(),
           sell_high_ticks: non_neg_integer(),
           sell_low_ticks: non_neg_integer(),
-          profit_per_trade: non_neg_integer(),
+          profit_per_trade: Float.t(),
+          trades_per_tick: Float.t(),
+          risk: Float.t(),
           strategy: AlgoTrading.Strategy.t(),
         }
 
-  def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.profit > item2.profit, do: :gt
-  def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.profit == item2.profit, do: :eq
-  def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.profit < item2.profit, do: :lt
+  def calculate_risk(%__MODULE__{} = epoch) do
+    ((1 - epoch.strategy.sell_low / 100 * 10) + (epoch.strategy.sell_high / 100 * 50)) / 2
+  end
+
+  def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.profit_per_trade * (item1.risk * 1) * (item1.trades_per_tick * 1) > item2.profit_per_trade * (item2.risk * 1) * (item2.trades_per_tick * 1)  , do: :gt
+  def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.profit_per_trade * (item1.risk * 1) * (item1.trades_per_tick * 1) == item2.profit_per_trade * (item2.risk * 1) * (item2.trades_per_tick * 1)  , do: :eq
+  def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.profit_per_trade * (item1.risk * 1) * (item1.trades_per_tick * 1) < item2.profit_per_trade * (item2.risk * 1) * (item2.trades_per_tick * 1)  , do: :lt
+
+  # def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.risk > item2.risk, do: :gt
+  # def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.risk == item2.risk, do: :eq
+  # def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.risk < item2.risk, do: :lt
+
+  # def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.profit > item2.profit, do: :gt
+  # def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.profit == item2.profit, do: :eq
+  # def compare(%__MODULE__{} = item1, %__MODULE__{} = item2) when item1.profit < item2.profit, do: :lt
+
 end
 
 defmodule Cmcscraper.Models.AlgoTrading.ActiveTrade do

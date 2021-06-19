@@ -44,7 +44,8 @@ defmodule Cmcscraper.MixProject do
       {:floki, "~> 0.20.0"},
       {:statistics, "~> 0.6.2"},
       {:poison, "~> 3.1"},
-      {:exconstructor, "~> 1.1"}
+      {:exconstructor, "~> 1.1"},
+      {:websockex, "~> 0.4.3"}
     ]
   end
 

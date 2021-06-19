@@ -2,6 +2,7 @@ defmodule Cmcscraper.Helpers.PriceAnalysisHelper do
 
   alias Cmcscraper.Schemas.HistoricPrice
 
+  # CMC Slope Analysis
   def rank_slope_analysis(price_data) when is_list(price_data) do
     currency_name = Enum.at(price_data, 0).currency.currency_name
     {y, x} = do_stuff(price_data, [])

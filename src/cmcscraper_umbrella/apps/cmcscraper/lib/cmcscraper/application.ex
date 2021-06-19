@@ -7,6 +7,9 @@ defmodule Cmcscraper.Application do
 
   def start(_type, _args) do
 
+    :ets.new(:lot_size_lookup, [:set, :public, :named_table])
+    :ets.new(:exchange_info_lookup, [:set, :public, :named_table])
+
     children = [
       # Start the Ecto repository
       Cmcscraper.Repo,
@@ -17,7 +20,10 @@ defmodule Cmcscraper.Application do
     # Start the update server if not in test mode
     case Application.get_env(:cmcscraper, :env) do
       :test -> children
-      _ -> children ++ [Cmcscraper.Genservers.UpdateServerLogic]
+      _ -> children ++ [
+      #  Cmcscraper.Genservers.UpdateServerLogic,
+        Cmcscraper.Genservers.TradeStream
+      ]
     end
     |> Supervisor.start_link(strategy: :one_for_one, name: Cmcscraper.Supervisor)
   end

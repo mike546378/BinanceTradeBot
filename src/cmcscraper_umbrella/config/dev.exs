@@ -77,6 +77,11 @@ config :phoenix, :stacktrace_depth, 20
 
 config :cmcscraper,
   cmc_api_uri: System.get_env("CMC_API_URI") || "https://pro-api.coinmarketcap.com/",
-  binance_api_uri: System.get_env("BINANCE_API_URI") || "https://api1.binance.com/api/"
+  binance_api_uri: System.get_env("BINANCE_API_URI") || "https://api1.binance.com/api/",
+  binance_ws_uri: System.get_env("BINANCE_WS_URI") || "wss://stream.binance.com:9443/stream",
+  use_test_endpoints: false,
+  worker_mode: "algo_trade", # algo_trade, portfolio
+  algo_max_open_trades: 10,
+  algo_batch_size: 500
 
 import_config "dev.secret.exs"
